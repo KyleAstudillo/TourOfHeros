@@ -15,6 +15,17 @@ import { HttpClientModule }    from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService }  from './in-memory-data.service';
 import { HeroSearchComponent } from './hero-search/hero-search.component';
+import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
+
+//OKTA
+import { OktaAuthModule } from '@okta/okta-angular';
+const config = {
+  issuer: 'https://dev-493606.oktapreview.com/oauth2/default',
+  redirectUri: 'http://localhost:4200/implicit/callback',
+  clientId: '0oahwjq9cgHuVnWvJ0h7'
+}
+
 
 @NgModule({
   declarations: [
@@ -23,13 +34,16 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
     HeroDetailComponent,
     MessagesComponent,
     DashboardComponent,
-    HeroSearchComponent
+    HeroSearchComponent,
+    HomeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
+    OktaAuthModule.initAuth(config),
     // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // and returns simulated server responses.
     // Remove it when a real server is ready to receive requests.
