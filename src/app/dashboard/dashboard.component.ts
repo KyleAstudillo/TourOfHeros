@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Hero } from '../hero';
-import { HeroService } from '../hero.service';
+import { Coffee } from '../coffee';
+import { CoffeeService } from '../coffee.service';
 
 import { OktaAuthService } from '@okta/okta-angular';
 import { MessageService} from "../message.service";
@@ -12,9 +12,9 @@ import { MessageService} from "../message.service";
   styleUrls: [ './dashboard.component.css' ]
 })
 export class DashboardComponent implements OnInit {
-  heroes: Hero[] = [];
+  coffees: Coffee[] = [];
 
-  constructor(private heroService: HeroService, private oktaAuth: OktaAuthService, private messageService: MessageService) { }
+  constructor(private coffeeService: CoffeeService, private oktaAuth: OktaAuthService, private messageService: MessageService) { }
 
   async ngOnInit() {
     this.getHeroes();
@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getHeroes(): void {
-    this.heroService.getHeroes()
-      .subscribe(heroes => this.heroes = heroes.slice(1, 5));
+    this.coffeeService.getCoffees()
+      .subscribe(coffees => this.coffees = coffees.slice(1, 5));
   }
 }

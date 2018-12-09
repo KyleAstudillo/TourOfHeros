@@ -1,0 +1,10 @@
+<h3>Top Cofffee</h3>
+<div class="grid grid-pad">
+  <a *ngFor="let coffee of coffees" class="col-1-4"
+     routerLink="/detail/{{coffee.id}}">
+    <div class="module coffee">
+      <h4>{{coffee.name}}</h4>
+    </div>
+  </a>
+</div>
+<app-hero-search></app-hero-search>

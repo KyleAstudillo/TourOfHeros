@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Hero } from './hero';
-import { HEROES } from './mock-heroes';
+import { Coffee } from './coffee';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -19,24 +19,31 @@ const httpOptions = {
 
 export class HeroService {
 
-  private heroesUrl = 'api/heroes';  // URL to web api
+  //private heroesUrl = 'api/heroes';  // URL to web api
 
+  private heroesUrl = 'http://127.0.0.1:5000/api/coffee'
 
   constructor(private http: HttpClient,
               private messageService: MessageService) { }
 
   /** Log a HeroService message with the MessageService */
   private log(message: string) {
-    this.messageService.add(`HeroService: ${message}`);
+    this.messageService.add(`CoffeeService: ${message}`);
   }
 
   /** GET heroes from the server */
   /** GET heroes from the server */
   getHeroes (): Observable<Hero[]> {
+    this.log("INFO: " + this.heroesUrl);
+    let a = this.http.get<Coffee[]>(this.heroesUrl).pipe(
+      tap(_ => this.log('fetched coffee')),
+      catchError(this.handleError('getCoffee1', []))
+    );
+    this.log("INFO: " + a[0])
     return this.http.get<Hero[]>(this.heroesUrl)
       .pipe(
-        tap(_ => this.log('fetched heroes')),
-        catchError(this.handleError('getHeroes', []))
+        tap(_ => this.log('fetched coffee')),
+        catchError(this.handleError('getCoffee1', []))
       );
   }
 
@@ -44,8 +51,8 @@ export class HeroService {
   getHero(id: number): Observable<Hero> {
     const url = `${this.heroesUrl}/${id}`;
     return this.http.get<Hero>(url).pipe(
-      tap(_ => this.log(`fetched hero id=${id}`)),
-      catchError(this.handleError<Hero>(`getHero id=${id}`))
+      tap(_ => this.log(`fetched coffee id=${id}`)),
+      catchError(this.handleError<Hero>(`getCoffee id=${id}`))
     );
   }
 
@@ -73,7 +80,7 @@ export class HeroService {
   updateHero (hero: Hero): Observable<any> {
 
     return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
-      tap(_ => this.log(`updated hero id=${hero.id}`)),
+      tap(_ => this.log(`updated coffee id=${hero.id}`)),
       catchError(this.handleError<any>('updateHero'))
     );
   }
@@ -81,7 +88,7 @@ export class HeroService {
   /** POST: add a new hero to the server */
   addHero (hero: Hero): Observable<Hero> {
     return this.http.post<Hero>(this.heroesUrl, hero, httpOptions).pipe(
-      tap((hero: Hero) => this.log(`added hero w/ id=${hero.id}`)),
+      tap((hero: Hero) => this.log(`added coffee w/ id=${hero.id}`)),
       catchError(this.handleError<Hero>('addHero'))
     );
   }
@@ -93,7 +100,7 @@ export class HeroService {
 
     return this.http.delete<Hero>(url, httpOptions).pipe(
       tap(_ => this.log(`deleted hero id=${id}`)),
-      catchError(this.handleError<Hero>('deleteHero'))
+      catchError(this.handleError<Hero>('deleteCoffee'))
     );
   }
 
@@ -105,7 +112,7 @@ export class HeroService {
     }
     return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
       tap(_ => this.log(`found heroes matching "${term}"`)),
-      catchError(this.handleError<Hero[]>('searchHeroes', []))
+      catchError(this.handleError<Hero[]>('searchCoffee', []))
     );
   }
 
