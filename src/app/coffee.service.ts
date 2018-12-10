@@ -18,7 +18,7 @@ var httpOptions = {
 
 export class CoffeeService{
 
-  private serviceURL = 'http://127.0.0.1:5000/api/coffee'
+  private serviceURL = 'https://oodservercloudserver.azurewebsites.net/api/coffee'
 
   private customOptions;
 
