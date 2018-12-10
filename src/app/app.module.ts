@@ -8,7 +8,7 @@ import { HeroDetailComponent } from './hero-detail/hero-detail.component';
 import { MessagesComponent } from './messages/messages.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { HttpClientModule }    from '@angular/common/http';
+import { HttpClientModule} from '@angular/common/http';
 
 
 //Fake Database
@@ -22,7 +22,7 @@ import { LoginComponent } from './login/login.component';
 import { OktaAuthModule } from '@okta/okta-angular';
 const config = {
   issuer: 'https://dev-493606.oktapreview.com/oauth2/default',
-  redirectUri: 'http://localhost:4200/implicit/callback',
+  redirectUri: 'http://54.183.81.119:4200/implicit/callback',
   clientId: '0oahwjq9cgHuVnWvJ0h7'
 }
 

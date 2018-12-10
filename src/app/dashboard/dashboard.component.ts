@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   async ngOnInit() {
     this.getHeroes();
     const accessToken = await this.oktaAuth.getAccessToken();
+    this.coffeeService.setAuth(accessToken);
     this.messageService.add(accessToken);
   }
 

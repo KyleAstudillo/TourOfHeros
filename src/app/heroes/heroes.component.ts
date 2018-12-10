@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HeroService } from '../hero.service';
-import { Hero } from '../hero';
-import { HEROES } from '../mock-heroes';
+import { CoffeeService } from '../coffee.service';
+import { Coffee } from '../coffee';
 
 @Component({
   selector: 'app-heroes',
@@ -10,31 +9,31 @@ import { HEROES } from '../mock-heroes';
 })
 export class HeroesComponent implements OnInit {
 
-  heroes: Hero[];
+  coffees: Coffee[];
 
-  constructor(private heroService: HeroService) { }
+  constructor(private coffeeService: CoffeeService) { }
 
   ngOnInit() {
-    this.getHeroes()
+    this.getCoffees()
   }
 
-  getHeroes(): void {
-    this.heroService.getHeroes()
-      .subscribe(heroes => this.heroes = heroes);
+  getCoffees(): void {
+    this.coffeeService.getCoffees()
+      .subscribe(coffees => this.coffees = coffees);
   }
 
   add(name: string): void {
     name = name.trim();
     if (!name) { return; }
-    this.heroService.addHero({ name } as Hero)
-      .subscribe(hero => {
-        this.heroes.push(hero);
+    this.coffeeService.addCoffee({ name } as Coffee)
+      .subscribe(coffee => {
+        this.coffees.push(coffee);
       });
   }
 
-  delete(hero: Hero): void {
-    this.heroes = this.heroes.filter(h => h !== hero);
-    this.heroService.deleteHero(hero).subscribe();
+  delete(coffee: Coffee): void {
+    this.coffees = this.coffees.filter(h => h !== coffee);
+    this.coffeeService.deleteCoffee(coffee).subscribe();
   }
 
 }

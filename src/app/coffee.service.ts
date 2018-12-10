@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import { Coffee } from './coffee';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
@@ -6,8 +6,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+var httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json', "Authorization":"Not"})
 };
 
 
@@ -16,12 +16,22 @@ const httpOptions = {
 })
 
 
-export class CoffeeService {
+export class CoffeeService{
 
   private serviceURL = 'http://127.0.0.1:5000/api/coffee'
 
+  private customOptions;
+
+  private accesstoken;
+
   constructor(private http: HttpClient,
               private messageService: MessageService) { }
+
+
+  public setAuth(accesstoken: string){
+    this.accesstoken = accesstoken;
+    this.customOptions = {headers: new HttpHeaders({ 'Content-Type': 'application/json', "Authorization": `Bearer ${accesstoken}`})};
+  }
 
   /** Log a CoffeeService message with the MessageService */
   private log(message: string) {
@@ -69,16 +79,21 @@ export class CoffeeService {
 
   /** PUT: update the coffee on the server */
   updateCoffee (coffee: Coffee): Observable<any> {
-
-    return this.http.put(this.serviceURL, coffee, httpOptions).pipe(
-      tap(_ => this.log(`updated coffee id=${coffee.id}`)),
-      catchError(this.handleError<any>('updateCoffee'))
+    this.log("INFO update: " + coffee.name)
+    let urlOptions  = `?id=${coffee.id}&name=${coffee.name}&imageLink1=${coffee.imageLink1}&imageLink2=${coffee.imageLink2}&userId=${coffee.userId}&coffeeId=${coffee.coffeeId}`
+    let customURL = this.serviceURL + urlOptions;
+    return this.http.post<Coffee>(customURL, coffee, this.customOptions).pipe(
+      tap((coffee: Coffee) => this.log(`updated coffee id=${coffee.id}`)),
+      catchError(this.handleError<Coffee>('updateCoffee'))
     );
   }
 
   /** POST: add a new coffee to the server */
   addCoffee (coffee: Coffee): Observable<Coffee> {
-    return this.http.post<Coffee>(this.serviceURL, coffee, httpOptions).pipe(
+    this.log("INFO add: " + coffee.name)
+    let urlOptions  = `?id=${coffee.id}&name=${coffee.name}&imageLink1=${coffee.imageLink1}&imageLink2=${coffee.imageLink2}&userId=${coffee.userId}&coffeeId=${coffee.coffeeId}`
+    let customURL = this.serviceURL + urlOptions;
+    return this.http.post<Coffee>(customURL, coffee, this.customOptions).pipe(
       tap((coffee: Coffee) => this.log(`added coffee w/ id=${coffee.id}`)),
       catchError(this.handleError<Coffee>('addCoffee'))
     );
@@ -88,21 +103,34 @@ export class CoffeeService {
   deleteCoffee (coffee: Coffee | number): Observable<Coffee> {
     const id = typeof coffee === 'number' ? coffee : coffee.id;
     const url = `${this.serviceURL}/${id}`;
-
+    this.log("INFO Delete: " + url);
+    httpOptions = this.customOptions
     return this.http.delete<Coffee>(url, httpOptions).pipe(
       tap(_ => this.log(`deleted coffee id=${id}`)),
       catchError(this.handleError<Coffee>('deleteCoffee'))
     );
   }
 
-  /* GET heroes whose name contains search term */
+  /** DELETE: delete the coffee from the server */
+  deleteCoffee2 (coffee: Coffee): Observable<Coffee> {
+    const id = coffee.id;
+    const url = `${this.serviceURL}/${id}`;
+    this.log("INFO Delete: " + url);
+    const options = this.customOptions = {headers: new HttpHeaders({ 'Content-Type': 'application/json', "Authorization": `Bearer ${this.accesstoken}`})};
+    return this.http.delete<Coffee>(url, options).pipe(
+      tap(_ => this.log(`deleted coffee id=${id}`)),
+      catchError(this.handleError<Coffee>('deleteCoffee'))
+    );
+  }
+
+  /* GET coffees whose name contains search term */
   searchCoffees(term: string): Observable<Coffee[]> {
     if (!term.trim()) {
-      // if not search term, return empty hero array.
+      // if not search term, return empty coffee array.
       return of([]);
     }
     return this.http.get<Coffee[]>(`${this.serviceURL}/?name=${term}`).pipe(
-      tap(_ => this.log(`found heroes matching "${term}"`)),
+      tap(_ => this.log(`found coffees matching "${term}"`)),
       catchError(this.handleError<Coffee[]>('searchCoffees', []))
     );
   }

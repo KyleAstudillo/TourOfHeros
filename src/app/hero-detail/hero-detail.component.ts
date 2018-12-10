@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { Hero } from '../hero';
+import { Coffee } from '../coffee';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { HeroService }  from '../hero.service';
+import { CoffeeService }  from '../coffee.service';
 
 @Component({
   selector: 'app-hero-detail',
@@ -12,22 +12,22 @@ import { HeroService }  from '../hero.service';
 
 export class HeroDetailComponent implements OnInit {
 
-  @Input() hero: Hero;
+  @Input() coffee: Coffee;
 
   constructor(
     private route: ActivatedRoute,
-    private heroService: HeroService,
+    private coffeeService: CoffeeService,
     private location: Location
   ) {}
 
   ngOnInit(): void {
-    this.getHero();
+    this.getCoffee();
   }
 
-  getHero(): void {
+  getCoffee(): void {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.heroService.getHero(id)
-      .subscribe(hero => this.hero = hero);
+    this.coffeeService.getCoffee(id)
+      .subscribe(coffee => this.coffee = coffee);
   }
 
   goBack(): void {
@@ -35,7 +35,7 @@ export class HeroDetailComponent implements OnInit {
   }
 
   save(): void {
-    this.heroService.updateHero(this.hero)
+    this.coffeeService.updateCoffee(this.coffee)
       .subscribe(() => this.goBack());
   }
 

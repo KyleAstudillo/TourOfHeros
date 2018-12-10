@@ -1,20 +1,20 @@
-<h2>My Heroes</h2>
+<h2>My Coffees</h2>
 <div>
-  <label>Hero name:
-    <input #heroName />
+  <label>Coffee name:
+    <input #coffeeName />
   </label>
   <!-- (click) passes input value to add() and then clears the input -->
-  <button (click)="add(heroName.value); heroName.value=''">
+  <button (click)="add(coffeeName.value); coffeeName.value=''">
     add
   </button>
 </div>
 
 <ul class="heroes">
-  <li *ngFor="let hero of heroes">
-    <a routerLink="/detail/{{hero.id}}">
-      <span class="badge">{{hero.id}}</span> {{hero.name}}
+  <li *ngFor="let coffee of coffees">
+    <a routerLink="/detail/{{coffee.id}}">
+      <span class="badge">{{coffee.id}}</span> {{coffee.name}}
     </a>
-    <button class="delete" title="delete hero"
-            (click)="delete(hero)">x</button>
+    <button class="delete" title="delete coffee"
+            (click)="delete(coffee)">x</button>
   </li>
 </ul>
